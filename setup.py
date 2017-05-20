@@ -34,7 +34,10 @@ setup(
     include_package_data=True,
     zip_safe=False,
     platforms='any',
-    install_requires=[],
+    setup_requires=["numpy"],
+    install_requires=[
+        "numpy"
+    ],
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
