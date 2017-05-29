@@ -1,3 +1,6 @@
+import math
+
+
 class Observation(object):
     x = None
     y = None
@@ -52,21 +55,84 @@ class SampleDistribution(object):
     sample = None
     group_id = None
 
-    def __init__(self, sample=None, group_id=None):
+    categorical_value = None
+    is_categorical = False
+    is_numerical = False
+
+    def __init__(self, sample=None, group_id=None, categorical_value=None, mean=None, sd=None, sample_size=None, proportion=None):
         if group_id is not None:
             self.group_id = group_id
+        if categorical_value is not None:
+            self.categorical_value = categorical_value
+
+        if mean is not None:
+            self.mean = mean
+            self.is_numerical = True
+
+        if proportion is not None:
+            self.proportion = proportion
+            self.is_categorical = True
+
+        if sample_size is not None:
+            self.sample_size = sample_size
+
+        if sd is not None:
+            self.sd = sd
+
+        if self.sd is not None and self.sample_size is not None:
+            self.variance = self.sd * self.sd
+            self.sum_of_squares = self.variance * (self.sample_size-1)
+
         if sample is not None:
             self.sample = sample
-            self.mean = SampleDistribution.calculate_mean(sample, group_id)
+            if sample.is_numerical():
+                self.mean = SampleDistribution.calculate_mean(sample, group_id)
+                self.sum_of_squares = SampleDistribution.calculate_sum_of_squares(sample, self.mean, group_id)
+                self.sample_size = sample.count_by_group_id(group_id)
+                self.variance = self.sum_of_squares / (self.sample_size - 1)
+                self.sd = math.sqrt(self.variance)
+                self.is_numerical = True
+            elif sample.is_categorical() and categorical_value is not None:
+                self.proportion = SampleDistribution.calculate_proportion(sample, categorical_value, group_id)
+                self.sample_size = sample.count_by_group_id(group_id)
+                self.mean = self.proportion * self.sample_size
+                self.variance = self.proportion * (1.0 - self.proportion) * self.sample_size
+                self.is_categorical = True
 
     @staticmethod
     def calculate_mean(sample, group_id):
         count = 0
-        sum = 0
+        the_sum = 0
         for i in range(sample.size()):
             observation = sample.get(i)
-            if observation.group_id != group_id:
+            if group_id is not None and observation.group_id != group_id:
                 continue
-            sum += observation.x
+            the_sum += observation.x
             count += 1
-        return sum / count
+        return the_sum / count
+
+    @staticmethod
+    def calculate_sum_of_squares(sample, mean, group_id):
+        the_sum = 0
+        for i in range(sample.size()):
+            observation = sample.get(i)
+            if group_id is not None and observation.group_id != group_id:
+                continue
+            the_sum += (observation.x - mean) * (observation.x - mean)
+        return the_sum
+
+    @staticmethod
+    def calculate_proportion(sample, categorical_value, group_id):
+        counter1 = 0
+        counter2 = 0
+        for i in range(sample.size()):
+            observation = sample.get(i)
+            if group_id is not None and observation.group_id != group_id:
+                continue
+            counter2 += 1
+            if observation.label == categorical_value:
+                counter1 += 1
+        if counter2 == 0:
+            return 0
+        return counter1 / counter2
+
