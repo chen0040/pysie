@@ -35,6 +35,25 @@ class Sample(object):
     def add(self, observation):
         self.observations.append(observation)
 
+    def add_numeric(self, numeric, group_id=None):
+        ob = Observation()
+        ob.x = numeric
+        ob.group_id = group_id
+        self.add(ob)
+
+    def add_category(self, category, group_id=None):
+        ob = Observation()
+        ob.label = category
+        ob.group_id = group_id
+        self.add(ob)
+
+    def add_xy(self, x, y, group_id=None):
+        ob = Observation()
+        ob.x = x
+        ob.y = y
+        ob.group_id = group_id
+        self.add(ob)
+
     def size(self):
         return len(self.observations)
 
@@ -58,6 +77,14 @@ class SampleDistribution(object):
     categorical_value = None
     is_categorical = False
     is_numerical = False
+
+    sd = None
+    sample_size = None
+    mean = None
+    variance = None
+    sum_of_squares= None
+
+    proportion = None
 
     def __init__(self, sample=None, group_id=None, categorical_value=None, mean=None, sd=None, sample_size=None, proportion=None):
         if group_id is not None:
