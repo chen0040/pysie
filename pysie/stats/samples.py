@@ -89,22 +89,12 @@ class SampleDistribution(object):
     def __init__(self, sample=None, group_id=None, categorical_value=None, mean=None, sd=None, sample_size=None, proportion=None):
         if group_id is not None:
             self.group_id = group_id
-        if categorical_value is not None:
-            self.categorical_value = categorical_value
 
-        if mean is not None:
-            self.mean = mean
-            self.is_numerical = True
-
-        if proportion is not None:
-            self.proportion = proportion
-            self.is_categorical = True
+        self.track_categorical(categorical_value, proportion)
+        self.track_numerical(mean, sd)
 
         if sample_size is not None:
             self.sample_size = sample_size
-
-        if sd is not None:
-            self.sd = sd
 
         if self.sd is not None and self.sample_size is not None:
             self.variance = self.sd * self.sd
@@ -112,6 +102,22 @@ class SampleDistribution(object):
 
         if sample is not None:
             self.build(sample)
+
+    def track_categorical(self, categorical_value, proportion):
+        if categorical_value is not None:
+            self.categorical_value = categorical_value
+
+        if proportion is not None:
+            self.proportion = proportion
+            self.is_categorical = True
+
+    def track_numerical(self, mean, sd):
+        if mean is not None:
+            self.mean = mean
+            self.is_numerical = True
+
+        if sd is not None:
+            self.sd = sd
 
     def build(self, sample):
         self.sample = sample
