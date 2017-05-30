@@ -111,20 +111,23 @@ class SampleDistribution(object):
             self.sum_of_squares = self.variance * (self.sample_size-1)
 
         if sample is not None:
-            self.sample = sample
-            if sample.is_numerical():
-                self.mean = SampleDistribution.calculate_mean(sample, group_id)
-                self.sum_of_squares = SampleDistribution.calculate_sum_of_squares(sample, self.mean, group_id)
-                self.sample_size = sample.count_by_group_id(group_id)
-                self.variance = self.sum_of_squares / (self.sample_size - 1)
-                self.sd = math.sqrt(self.variance)
-                self.is_numerical = True
-            elif sample.is_categorical() and categorical_value is not None:
-                self.proportion = SampleDistribution.calculate_proportion(sample, categorical_value, group_id)
-                self.sample_size = sample.count_by_group_id(group_id)
-                self.mean = self.proportion * self.sample_size
-                self.variance = self.proportion * (1.0 - self.proportion) * self.sample_size
-                self.is_categorical = True
+            self.build(sample)
+
+    def build(self, sample):
+        self.sample = sample
+        if sample.is_numerical():
+            self.mean = SampleDistribution.calculate_mean(sample, self.group_id)
+            self.sum_of_squares = SampleDistribution.calculate_sum_of_squares(sample, self.mean, self.group_id)
+            self.sample_size = sample.count_by_group_id(self.group_id)
+            self.variance = self.sum_of_squares / (self.sample_size - 1)
+            self.sd = math.sqrt(self.variance)
+            self.is_numerical = True
+        elif sample.is_categorical() and self.categorical_value is not None:
+            self.proportion = SampleDistribution.calculate_proportion(sample, self.categorical_value, self.group_id)
+            self.sample_size = sample.count_by_group_id(self.group_id)
+            self.mean = self.proportion * self.sample_size
+            self.variance = self.proportion * (1.0 - self.proportion) * self.sample_size
+            self.is_categorical = True
 
     @staticmethod
     def calculate_mean(sample, group_id):
