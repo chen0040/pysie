@@ -1,14 +1,14 @@
 import math
 from enum import Enum
 
-from scipy.stats import norm
-
+from scipy.stats import norm, t
 
 class DistributionFamily(Enum):
     normal = 1
     student_t = 2
     fisher = 3
     chi_square = 4
+
 
 class MeanSamplingDistribution(object):
     sample_distribution = None
@@ -40,13 +40,17 @@ class MeanSamplingDistribution(object):
         else:
             self.distribution_family = DistributionFamily.normal
 
-
     @staticmethod
     def calculate_standard_error(sample_sd, sample_size):
         return sample_sd / math.sqrt(sample_size)
 
     def confidence_interval(self, confidence_level):
-        pf = norm.ppf(1 - (1 - confidence_level) / 2)
-        return (-pf, pf)
-
-
+        q = 1 - (1 - confidence_level) / 2
+        if self.distribution_family == DistributionFamily.normal:
+            z = norm.ppf(q)
+            pf = z * self.standard_error + self.point_estimate
+            return -pf, pf
+        else:
+            t_df = t.ppf(q, self.df)
+            pf = t_df * self.standard_error + self.point_estimate
+            return -pf, pf
