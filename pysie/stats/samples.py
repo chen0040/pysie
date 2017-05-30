@@ -169,6 +169,6 @@ class SampleDistribution(object):
             if observation.label == categorical_value:
                 counter1 += 1
         if counter2 == 0:
-            return 0
-        return counter1 / counter2
+            return 0.0
+        return float(counter1) / counter2
 
