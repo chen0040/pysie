@@ -41,8 +41,8 @@ class TernarySearchTrie(object):
         elif compared > 0:
             x.right = self._put(x.right, key, value, d)
         else:
-            if len(key)-1 > d:
-                x.mid = self._put(x.mid, key, value, d+1)
+            if len(key) - 1 > d:
+                x.mid = self._put(x.mid, key, value, d + 1)
             else:
                 if x.value is None:
                     self.N += 1
@@ -66,7 +66,7 @@ class TernarySearchTrie(object):
             return self._get(x.right, key, d)
         else:
             if len(key) - 1 > d:
-                return self._get(x.mid, key, d+1)
+                return self._get(x.mid, key, d + 1)
             else:
                 return x
 
@@ -83,8 +83,8 @@ class TernarySearchTrie(object):
         elif compared > 0:
             x.right = self._delete(x.right, key, d)
         else:
-            if len(key)-1 > d:
-                x.mid = self._delete(x.mid, key, d+1)
+            if len(key) - 1 > d:
+                x.mid = self._delete(x.mid, key, d + 1)
             else:
                 self.N -= 1
                 x = None
@@ -102,11 +102,41 @@ class TernarySearchTrie(object):
     def is_empty(self):
         return self.N == 0
 
+    def keys(self):
+        queue = []
+        self.collect(self.root, '', queue)
+        return queue
+
+    def values(self):
+        queue = []
+        self.collect_values(self.root, queue)
+
+    def collect(self, x, prefix, queue):
+        if x is None:
+            return
+        if x.value is not None:
+            queue.append(prefix + chr(x.key))
+        self.collect(x.left, prefix, queue)
+        self.collect(x.mid, prefix + chr(x.key), queue)
+        self.collect(x.right, prefix, queue)
+
+    def collect_values(self, x, queue):
+        if x is None:
+            return
+        if x.value is not None:
+            queue.append(x.value)
+
+        self.collect_values(x.left, queue)
+        self.collect_values(x.mid, queue)
+        self.collect_values(x.right, queue)
+
 
 class TernarySearchSet(TernarySearchTrie):
-
     def add(self, key):
         self.put(key, 0)
 
     def contains(self, key):
         return self.contains_key(key)
+
+    def to_array(self):
+        return self.keys()
