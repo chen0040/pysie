@@ -1,5 +1,7 @@
 import math
 
+from pysie.dsl.set import TernarySearchTrie
+
 
 class Observation(object):
     x = None
@@ -69,6 +71,20 @@ class Sample(object):
     def count_by_group_id(self, group_id):
         return sum(1 for x in self.observations if group_id is None or x.group_id == group_id)
 
+    def split_by_group_id(self):
+        result = TernarySearchTrie()
+        for ob in self.observations:
+            group_id = ob.group_id
+            if group_id is None:
+                continue
+            if result.contains_key(group_id):
+                result.get(group_id).observations.append(ob)
+            else:
+                sample = Sample()
+                sample.observations.append(ob)
+                result.put(group_id, sample)
+        return result
+
 
 class SampleDistribution(object):
     sample = None
@@ -82,11 +98,12 @@ class SampleDistribution(object):
     sample_size = None
     mean = None
     variance = None
-    sum_of_squares= None
+    sum_of_squares = None
 
     proportion = None
 
-    def __init__(self, sample=None, group_id=None, categorical_value=None, mean=None, sd=None, sample_size=None, proportion=None):
+    def __init__(self, sample=None, group_id=None, categorical_value=None, mean=None, sd=None, sample_size=None,
+                 proportion=None):
         if group_id is not None:
             self.group_id = group_id
 
@@ -98,7 +115,7 @@ class SampleDistribution(object):
 
         if self.sd is not None and self.sample_size is not None:
             self.variance = self.sd * self.sd
-            self.sum_of_squares = self.variance * (self.sample_size-1)
+            self.sum_of_squares = self.variance * (self.sample_size - 1)
 
         if sample is not None:
             self.build(sample)
@@ -171,4 +188,3 @@ class SampleDistribution(object):
         if counter2 == 0:
             return 0.0
         return float(counter1) / counter2
-

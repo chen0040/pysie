@@ -3,7 +3,7 @@ from scipy.stats import norm, t
 import math
 
 
-class TwoGroupMeanTesting(object):
+class MeanDiffTesting(object):
     sampling_distribution = None
     p_value_one_tail = None
     p_value_two_tail = None
