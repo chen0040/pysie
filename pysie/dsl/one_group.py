@@ -24,6 +24,8 @@ class MeanTesting(object):
             Z = (sampling_distribution.point_estimate - mean_null) / standard_error_null
             self.test_statistic = Z
             pf = norm.cdf(Z)
+            if Z < 0:
+                pf -= 0.5
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
         else:
@@ -31,12 +33,18 @@ class MeanTesting(object):
             td_df = (sampling_distribution.point_estimate - mean_null) / standard_error_null
             self.test_statistic = td_df
             pf = t.cdf(td_df, sampling_distribution.df)
+            if td_df < 0:
+                pf -= 0.5
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
 
         if significance_level is not None:
             self.reject_mean_null = (self.p_value_one_tail < significance_level,
                                      self.p_value_two_tail < significance_level)
+
+    def will_reject(self, significance_level):
+
+        return self.p_value_one_tail < significance_level, self.p_value_two_tail < significance_level
 
 
 class ProportionTesting(object):
@@ -59,6 +67,8 @@ class ProportionTesting(object):
             Z = (sampling_distribution.point_estimate - p_null) / standard_error_null
             self.test_statistic = Z
             pf = norm.cdf(Z)
+            if Z < 0:
+                pf -= 0.5
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
         else:
@@ -66,6 +76,8 @@ class ProportionTesting(object):
             td_df = (sampling_distribution.point_estimate - p_null) / standard_error_null
             self.test_statistic = td_df
             pf = t.cdf(td_df, sampling_distribution.df)
+            if td_df < 0:
+                pf -= 0.5
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
 

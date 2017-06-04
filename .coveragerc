@@ -1,8 +1,0 @@
-[run]
-source = tests
-omit =
-    */python?.?/*
-    */lib-python/?.?/*.py
-    */lib_pypy/_*.py
-    */site-packages/*
-    /usr/share/pyshared/*
