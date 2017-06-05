@@ -75,8 +75,8 @@ class ProportionTesting(object):
         else:
             simulated_proportions = self.simulate()
 
-            self.p_value_one_tail = sum(x for x in simulated_proportions if x > sampling_distribution.point_estimate) / 1000.0
-            self.p_value_two_tail = self.p_value_one_tail * 2
+            self.p_value_one_tail = sum(1.0 for x in simulated_proportions if x > sampling_distribution.point_estimate) / 1000.0
+            self.p_value_two_tail = self.p_value_one_tail
 
         if significance_level is not None:
             self.reject_mean_null = (self.p_value_one_tail < significance_level,
