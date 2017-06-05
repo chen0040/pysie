@@ -20,12 +20,16 @@ class MeanDiffTesting(object):
             Z = sampling_distribution.point_estimate / sampling_distribution.standard_error
             self.test_statistic = Z
             pf = norm.cdf(Z)
+            if Z < 0:
+                pf = 1 - pf
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
         else:
             td_df = sampling_distribution.point_estimate / sampling_distribution.standard_error
             self.test_statistic = td_df
             pf = t.cdf(td_df, sampling_distribution.df)
+            if td_df < 0:
+                pf = 1 - pf
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
 
@@ -55,6 +59,8 @@ class ProportionDiffTesting(object):
             Z = sampling_distribution.point_estimate / standard_error_null
             self.test_statistic = Z
             pf = norm.cdf(Z)
+            if Z < 0:
+                pf = 1 - pf
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
         else:
@@ -62,6 +68,8 @@ class ProportionDiffTesting(object):
             td_df = sampling_distribution.point_estimate / standard_error_null
             self.test_statistic = td_df
             pf = t.cdf(td_df, sampling_distribution.df)
+            if td_df < 0:
+                pf = 1 - pf
             self.p_value_one_tail = 1 - pf
             self.p_value_two_tail = self.p_value_one_tail * 2
 
