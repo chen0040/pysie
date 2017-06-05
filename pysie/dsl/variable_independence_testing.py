@@ -55,7 +55,6 @@ class ContingencyTable(object):
 
 
 class Anova(object):
-
     sample = None
     individual_samples = None
     individual_sample_distributions = None
@@ -120,8 +119,6 @@ class Anova(object):
         if self.significance_level is not None:
             self.reject_mean_same = self.p_value >= self.significance_level
 
+    def will_reject(self, significance_level):
 
-
-
-
-
+        return self.p_value < significance_level

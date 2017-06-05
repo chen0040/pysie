@@ -110,6 +110,7 @@ class TernarySearchTrie(object):
     def values(self):
         queue = []
         self.collect_values(self.root, queue)
+        return queue
 
     def collect(self, x, prefix, queue):
         if x is None:
