@@ -37,15 +37,15 @@ class Sample(object):
     def add(self, observation):
         self.observations.append(observation)
 
-    def add_numeric(self, numeric, group_id=None):
+    def add_numeric(self, x, group_id=None):
         ob = Observation()
-        ob.x = numeric
+        ob.x = x
         ob.group_id = group_id
         self.add(ob)
 
-    def add_category(self, category, group_id=None):
+    def add_category(self, label, group_id=None):
         ob = Observation()
-        ob.label = category
+        ob.label = label
         ob.group_id = group_id
         self.add(ob)
 
