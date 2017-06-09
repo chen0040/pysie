@@ -26,17 +26,13 @@ Run the following command to install pysie using pip
 Features
 ========
 
-* Automatically switch between Student's T, binomial simulation bootstrapping, or normal sampling distribution based
-on the sample size
+* Automatically switch between Student's T, binomial simulation bootstrapping, or normal sampling distribution based on the sample size
 * Computer the confidence interval for the sampling distribution given a confidence level
 * Carry out hypothesis testing for both mean (for numerical sample data) and proportion (for categorical sample data)
 * Carry out hypothesis testing between two different experiment setup (or two different distinct groups or populations)
-* Anova: Carry out hypothesis testing on whether a numerical variable is independent of a categorical variable given a
-sample data table containing the two variables as columns
-* Chi-Square Testing: Carry out hypothesis testing on whether two categorical variables are independent of each other
-given a sample data table containing the two variables as columns
-* Anova for regression: Carry out hypothesis testing on whether two numerical variables are independent of each other
-given a sample data table containing the two variables as columns
+* Anova: Carry out hypothesis testing on whether a numerical variable is independent of a categorical variable given a sample data table containing the two variables as columns
+* Chi-Square Testing: Carry out hypothesis testing on whether two categorical variables are independent of each other given a sample data table containing the two variables as columns
+* Anova for regression: Carry out hypothesis testing on whether two numerical variables are independent of each other given a sample data table containing the two variables as columns
 
 Usage
 =====
@@ -299,7 +295,7 @@ categorical sample is taken) is equal to a particular value 0.51:
 
 
 Hypothesis Testing on Mean Comparison (Two Groups)
----------------------------------------
+--------------------------------------------------
 
 The sample code below shows how to test whether to reject the hypothesis that the means of two different groups (e.g.
 two different experiments or populations from which the numerical samples are take) are the same:
@@ -328,7 +324,7 @@ two different experiments or populations from which the numerical samples are ta
 
 
 Hypothesis Testing on Proportion Comparison (Two Groups)
----------------------------------------------
+--------------------------------------------------------
 
 The sample code below shows how to test whether reject the hypothesis that the true proportion of class "A" in two
 groups (from which the categorical samples are taken) are equal to each other:
