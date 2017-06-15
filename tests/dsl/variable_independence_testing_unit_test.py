@@ -1,8 +1,9 @@
 import unittest
 
+import numpy
 from numpy.random.mtrand import normal
 
-from pysie.dsl.variable_independence_testing import Anova, ContingencyTable
+from pysie.dsl.variable_independence_testing import Anova, ContingencyTable, ChiSquare
 from pysie.stats.samples import Sample
 
 
@@ -50,6 +51,21 @@ class ContingencyTableUnitTest(unittest.TestCase):
         self.assertEqual(table.get_row_total('eventC'), 30)
         self.assertEqual(table.get_total(), 55)
 
+
+class ChiSquareUnitTest(unittest.TestCase):
+    def test_anova(self):
+        sample = Sample()
+
+        for i in range(1000):
+            sample.add_category('itemA' if numpy.random.randn() > 0 else 'itemB', 'group1')
+            sample.add_category('itemA' if numpy.random.randn() > 0 else 'itemB', 'group2')
+            sample.add_category('itemA' if numpy.random.randn() > 0 else 'itemB', 'group3')
+
+        testing = ChiSquare(sample=sample)
+
+        print('p-value: ' + str(testing.p_value))
+        reject = testing.will_reject(0.01)
+        print('will reject [two categorical variables are independent of each other] ? ' + str(reject))
 
 if __name__ == '__main__':
     unittest.main()

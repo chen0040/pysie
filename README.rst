@@ -383,3 +383,19 @@ The sample code below show how to test whether to reject that hypothesis that tw
 of each other for a population (from which the categorical sampleis taken):
 
 
+.. code-block:: python
+
+    sample = Sample()
+
+    for i in range(1000):
+        sample.add_category('itemA' if numpy.random.randn() > 0 else 'itemB', 'group1')
+        sample.add_category('itemA' if numpy.random.randn() > 0 else 'itemB', 'group2')
+        sample.add_category('itemA' if numpy.random.randn() > 0 else 'itemB', 'group3')
+
+    testing = ChiSquare(sample=sample)
+
+    print('p-value: ' + str(testing.p_value))
+    reject = testing.will_reject(0.01)
+    print('will reject [two categorical variables are independent of each other] ? ' + str(reject))
+
+

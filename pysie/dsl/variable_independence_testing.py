@@ -4,7 +4,7 @@ from pysie.dsl.set import TernarySearchSet, TernarySearchTrie
 from pysie.stats.distributions import MeanSamplingDistribution
 from pysie.stats.samples import SampleDistribution
 
-from scipy.stats import f
+from scipy.stats import f, chi2
 
 
 class ContingencyTable(object):
@@ -121,4 +121,42 @@ class Anova(object):
 
     def will_reject(self, significance_level):
 
+        return self.p_value < significance_level
+
+
+class ChiSquare(object):
+    chiSq = None
+    sample = None
+    p_value = None
+    df = None
+    significance_level = None
+
+    def __init__(self, sample, significance_level=None):
+
+        self.sample = sample
+        self.significance_level = significance_level
+
+        table = ContingencyTable()
+        for i in range(sample.size()):
+            row = sample.get(i)
+            row_name = row.label
+            column_name = row.group_id
+            table.set_cell(row_name, column_name, table.get_cell(row_name, column_name) + 1)
+
+        total = table.get_total()
+        self.chiSq = 0
+        for row in table.rows.to_array():
+            for column in table.columns.to_array():
+                expected = table.get_row_total(row) * table.get_column_total(column) / total
+                observed = table.get_cell(row, column)
+                self.chiSq += math.pow(observed - expected, 2) / expected
+
+        self.df = (table.rows.size() - 1) * (table.columns.size() - 1)
+
+        self.p_value = 1 - chi2.cdf(self.chiSq, self.df)
+
+        if self.significance_level is not None:
+            self.reject_mean_same = self.p_value >= self.significance_level
+
+    def will_reject(self, significance_level):
         return self.p_value < significance_level
