@@ -2,7 +2,7 @@ import unittest
 
 from numpy.random.mtrand import normal
 
-from pysie.dsl.variable_independence_testing import Anova
+from pysie.dsl.variable_independence_testing import Anova, ContingencyTable
 from pysie.stats.samples import Sample
 
 
@@ -30,6 +30,26 @@ class AnovaUnitTest(unittest.TestCase):
         reject = testing.will_reject(0.01)
         print('will reject [same mean for all groups] ? ' + str(reject))
         self.assertFalse(reject)
+
+
+class ContingencyTableUnitTest(unittest.TestCase):
+    def test_table(self):
+        table = ContingencyTable()
+        table.set_cell('eventA', 'eventB', 10)
+        table.set_cell('eventC', 'eventB', 20)
+        table.set_cell('eventA', 'eventD', 15)
+        table.set_cell('eventC', 'eventD', 10)
+
+        print(table.get_column_total('eventB'))
+        self.assertEqual(table.get_column_total('eventB'), 30)
+        print(table.get_column_total('eventD'))
+        self.assertEqual(table.get_column_total('eventD'), 25)
+        print(table.get_row_total('eventA'))
+        self.assertEqual(table.get_row_total('eventA'), 25)
+        print(table.get_row_total('eventC'))
+        self.assertEqual(table.get_row_total('eventC'), 30)
+        self.assertEqual(table.get_total(), 55)
+
 
 if __name__ == '__main__':
     unittest.main()
