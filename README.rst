@@ -378,6 +378,7 @@ independent of each other for a population (from which the numerical sample is t
 
 
 Independence Testing between Two Categorical Variables (Chi-Square Testing):
+----------------------------------------------------------------------------
 
 The sample code below show how to test whether to reject that hypothesis that two categorical variables are independent
 of each other for a population (from which the categorical sampleis taken):
