@@ -360,7 +360,8 @@ Independence Testing between One Numerical and One Categorical Variable (ANOVA)
 -------------------------------------------------------------------------------
 
 The sample code below show how to test whether to reject the hypothesis that a numerical and categorical variable are
-independent of each other for a population (from which the numerical sample is taken):
+independent of each other for a population (from which the numerical sample is taken). In this example, the
+numerical variable is 'x' while the categorical variable is 'group_id'.
 
 .. code-block:: python
 
@@ -381,7 +382,9 @@ Independence Testing between Two Categorical Variables (Chi-Square Testing):
 ----------------------------------------------------------------------------
 
 The sample code below show how to test whether to reject that hypothesis that two categorical variables are independent
-of each other for a population (from which the categorical sampleis taken):
+of each other for a population (from which the categorical sampleis taken). In this example,the first categorical
+variable is 'label' (which can have values 'itemA' or 'itemB'), and the second categorical variable is 'group_id'
+(which can have values 'group1', 'group2', or 'group3').
 
 
 .. code-block:: python
